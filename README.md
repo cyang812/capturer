@@ -13,7 +13,10 @@
 ### incremental update mechanism
 - This script will not re-download the photos or videos if they have already been downloaded. So it will do no harm by running this script several times. In the meanwhile, you can find back the missing photos or videos.
 
-+++++++++++++++++++++++++++++++++++++ RAW ++++++++++++++++++++++++++++++++++++++++++++++++++
+
+++++++++++++++RAW+++++++++++++++++++
+---
+
 # What's Capturer
 
 A capture tool used to capture pictures from web like Sina, LOFTER and huaban.
