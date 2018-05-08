@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
+
+# modify: cyang
+# date: 2018.05.08
+
+# base on https://github.com/Litreily/capturer
 # author: litreily
 # date: 2018.03.07
 """Capture pictures from lofter with username."""
@@ -7,18 +12,18 @@
 import re
 import os
 import platform
-
 import requests
-
 import time
 import random
-
+from download_process import *
 
 def _get_path(username):
-    path = {
-        'Windows': 'D:/litreily/Pictures/python/lofter/' + username,
-        'Linux': '/mnt/d/litreily/Pictures/python/lofter/' + username
-    }.get(platform.system())
+    # path = {
+    #     'Windows': 'D:/litreily/Pictures/python/lofter/' + username,
+    #     'Linux': '/mnt/d/litreily/Pictures/python/lofter/' + username
+    # }.get(platform.system())
+
+    path = username
 
     if not os.path.isdir(path):
         os.makedirs(path)
@@ -101,9 +106,9 @@ def _create_query_data(blogid, timestamp, query_number):
     return data
 
 
-def main():
+def main(username):
     # prepare paramters
-    username = 'litreily'
+    # username = 'litreily'
     blogid = _get_blogid(username)
     query_number = 40
     time_pattern = re.compile('s%d\.time=(.*);s.*type' % (query_number-1))
@@ -145,8 +150,9 @@ def main():
             for imgurl in imgurls:
                 index_img += 1
                 paths = '%s/%d.%s' % (path, index_img, re.search(r'(jpg|png|gif)', imgurl).group(0))
-                print('{}\t{}'.format(index_img, paths))
-                _capture_images(imgurl, paths)
+                # print('{}\t{}'.format(index_img, paths))
+                url_list.write(imgurl+'\n')
+                # _capture_images(imgurl, paths)
         
         if num_new_blogs != query_number:
             print('------------------------------- stop line -------------------------------')
@@ -163,4 +169,16 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    username = ''
+
+    url_list = open("url_list.txt",'w',encoding='utf-8')
+    main(username)
+    url_list.close()
+
+    url = get_url()
+    url = delete_watermark(url)
+    save_list_to_file(url, 'raw_url_list.txt')
+    chdir(username)
+    download(url)
+
+
